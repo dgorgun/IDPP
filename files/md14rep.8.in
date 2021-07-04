@@ -1,0 +1,16 @@
+ 
+ &cntrl
+   imin=0, irest=0, ntx=1,
+   ntt=1, tempi=100.0, temp0=400.0, tautp=1.0,
+   ntb=1, ntc=2, ntf=2, nsnb=10,
+   nstlim=5000, dt=0.001,
+   ntwe=50, ntpr=25, ntwx=500,
+   cut=10.0, ntr=1, ig=1603,
+ &end
+Apply restraints to the solute atoms
+ 12.5
+RES 1 115 
+END
+END
+
+

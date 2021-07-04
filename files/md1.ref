@@ -1,0 +1,26 @@
+ 
+ &cntrl
+   imin=0, irest=0, ntx=1, nmropt=1,
+   ntt=1, tempi=100.0,  temp0=TEMPERATURE, tautp=1.0,
+   ntb=1, ntc=2, ntf=2, nsnb=10,
+   nstlim=20000, dt=0.001
+   ntwe=50, ntpr=25, ntwx=500,
+   cut=10.0, ntr=1, ig=RANDOMNUM,
+ &end
+ &wt
+   type='TEMP0', istep1=0,     istep2=5000,
+                 value1=100.0, value2=TEMPERATURE,
+ &end
+ &wt
+   type='TEMP0', istep1=5000,   istep2=20000,
+                 value1=TEMPERATURE, value2=TEMPERATURE,
+ &end
+ &wt
+   type='END',
+ &end
+Apply restraints to the solute atoms
+ 500.0                              
+RES 1 115                        
+END         
+END         
+
