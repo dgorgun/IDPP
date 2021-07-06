@@ -1,0 +1,2 @@
+# Replica REPNUM
+-O -i md14.rep.REPNUM -p prmtop -c md14/gvpgv.crd.md14rep.REPNUM -o mdout.rep.REPNUM -r rst7.rep.REPNUM
