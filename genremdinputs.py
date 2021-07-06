@@ -299,7 +299,7 @@ def main(opt):
         for i in range(nrefgrpfls):
             # Writting to groupfile
             for line in grpfllines[i]:
-                line = line.replace('REPNUM','%03d'%(rep+1))
+                line = line.replace('REPNUM','%01d'%(rep+1))
                 if (DoingHamiltonian):
                     for j in range(len(hdims)):
                         line = line.replace(remd_txttypes[hdims[j]],prodlist[rep][hdims[j]])
