@@ -17,39 +17,6 @@ set TYP=gvpgv
 foreach RUN (min1 min2 min3 min4)
    echo Doing $RUN now
    echo ==============
-   mkdir $RUN
-   cp files/$RUN.in $RUN/
-   cd $RUN
-   ln -s ../Struct/$TYP.top .
-   ln -s ../$PREV/$TYP.crd.$PREV .
-
-       if ($RUN == min1 || $RUN == min2 || $RUN == min3 || $RUN == min4) then
-               ln -s ../$PREV/$TYP.crd.$PREV $TYP.crd.rst
-       endif
-
-       if ($RUN == min1 || $RUN == min2) then
-          mpirun -np 16 $SANDER -i $RUN.in -o $RUN.out \
-          -p $TYP.top -c $TYP.crd.$PREV -r $TYP.crd.$RUN -ref $TYP.crd.rst &
-       else
-          $SANDER_GPU -i $RUN.in -o $RUN.out \
-          -p $TYP.top -c $TYP.crd.$PREV -r $TYP.crd.$RUN -ref $TYP.crd.rst &
-       endif
-   sleep 900s
-   set DPRE=$PREV
-   set PREV=$RUN
-   cd ..
-end
-
-# Start individual equilibrations for each target temperature window
-
-set NUMREP=`wc -l < temp-list.dat`
-echo $NUMREP
-set PREV=min4
-
-foreach REP ( `seq 1 $NUMREP` )
-  foreach RUN (md1 md2 min11 md11 min12 md12 min13 md13 min14 md14)
-     echo Doing $RUN now
-     echo ==============
      if ($RUN == min11 || $RUN == min12 || $RUN == min13 || $RUN == min14) then
           cp files/$RUN.in files/$RUN"rep".$REP.in
      else
@@ -62,8 +29,8 @@ foreach REP ( `seq 1 $NUMREP` )
      cd $RUN
      ln -s ../Struct/$TYP.top .
       if ($RUN == md1) then
-              ln -s ../$PREV/$TYP.crd.$PREV $TYP.crd.rst
-              ln -s ../$PREV/$TYP.crd.$PREV .
+              ln -s ../$PREV/$TYP.crd.$PREV $TYP.crd.$PREV"rep".$REP.rst
+              ln -s ../$PREV/$TYP.crd.$PREV $TYP.crd.$PREV"rep".$REP
       endif
 
        if ($RUN == md2 || $RUN == min11) then
@@ -73,25 +40,32 @@ foreach REP ( `seq 1 $NUMREP` )
 
          if ($RUN == min12 || $RUN == min13 || $RUN == min14 || $RUN == min15 || $RUN == md16) then
               ln -s ../$DPRE/$TYP.crd.$PREV"rep".$REP .
-              ln -s ../$DPRE/$TYP.crd.$DPRE"rep".$REP $TYP.crd."rep".$REP.rst
+              ln -s ../$DPRE/$TYP.crd.$DPRE"rep".$REP $TYP.crd.rep.$REP.rst
          endif
 
          if ($RUN == md11 || $RUN == md12 || $RUN == md13 || $RUN == md14 || $RUN == md15) then
              ln -s ../$PREV/$TYP.crd.$PREV"rep".$REP .
-             ln -s ../$PREV/$TYP.crd.$PREV"rep".$REP $TYP.crd."rep".$REP.rst
+             ln -s ../$PREV/$TYP.crd.$PREV"rep".$REP $TYP.crd.rep.$REP.rst
          endif
 
         if ($RUN == md1) then
             $SANDER_GPU -i $RUN"rep".$REP.in -o $RUN"rep".$REP.out \
-            -p $TYP.top -c $TYP.crd.$PREV -r $TYP.crd.$RUN"rep".$REP -ref $TYP.crd.rst &
-         endif
+            -p $TYP.top -c $TYP.crd.$PREV"rep".$REP -r $TYP.crd.$RUN"rep".$REP -ref $TYP.crd.$PREV"rep".$REP &
+            sleep 900s
+            mv mdcrd rep$REP.mdcrd
+            mv mden rep$REP.mden
+            mv mdinfo rep$REP.mdinfo
+        endif
 
         if ($RUN == md2 || $RUN == min11 || $RUN == md11 || $RUN == min12 || $RUN == md12 || $RUN == min13 || $RUN == md13 || $RUN == min14 || $RUN == md14) then
             $SANDER_GPU -i $RUN"rep".$REP.in -o $RUN"rep".$REP.out \
-            -p $TYP.top -c $TYP.crd.$PREV"rep".$REP -r $TYP.crd.$RUN"rep".$REP -ref $TYP.crd."rep".$REP.rst &
-         endif
+            -p $TYP.top -c $TYP.crd.$PREV"rep".$REP -r $TYP.crd.$RUN"rep".$REP -ref $TYP.crd.$PREV"rep".$REP &
+            sleep 600s
+            mv mdcrd rep$REP.mdcrd
+            mv mden rep$REP.mden
+            mv mdinfo rep$REP.mdinfo
+        endif
 
-     sleep 900s
      set DPRE=$PREV
      set PREV=$RUN
      cd ..
