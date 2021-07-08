@@ -60,7 +60,7 @@ foreach RUN (min1 min2 min3 min4)
         if ($RUN == md2 || $RUN == min11 || $RUN == md11 || $RUN == min12 || $RUN == md12 || $RUN == min13 || $RUN == md13 || $RUN == min14 || $RUN == md14) then
             $SANDER_GPU -i $RUN"rep".$REP.in -o $RUN"rep".$REP.out \
             -p $TYP.top -c $TYP.crd.$PREV"rep".$REP -r $TYP.crd.$RUN"rep".$REP -ref $TYP.crd.$PREV"rep".$REP &
-            sleep 600s
+            sleep 900s
             mv mdcrd rep$REP.mdcrd
             mv mden rep$REP.mden
             mv mdinfo rep$REP.mdinfo
